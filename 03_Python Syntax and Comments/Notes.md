@@ -1,4 +1,4 @@
-## 2. Python Syntax and Comments
+## Python Syntax and Comments
 
 ---
 
