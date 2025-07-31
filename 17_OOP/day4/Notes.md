@@ -1,174 +1,127 @@
-# **Python Lecture: Exception & File Handling**
-
-
-## **1. What is an Exception?**
-
-An **exception** is just a fancy word for **error** that happens while your program is running.
-
-Example of common exceptions:
-
-* Dividing by zero → `ZeroDivisionError`
-* File not found → `FileNotFoundError`
-* Wrong data type → `ValueError`
-
-When an exception happens, your program will **stop** unless you handle it.
+## 📘 **Python OOP – Method Overloading & Overriding, issubclass(), super()**
 
 ---
 
-## **2. Why Handle Exceptions?**
+### **1. Method Overloading (Same name, different inputs)**
 
-If you don’t handle them:
+In other languages (like Java, C++), we can write **multiple methods** with the **same name** but **different number of arguments**.
 
-* Program stops 
+But in Python, we **can’t define multiple methods with the same name**.
+If we do, the **last one overwrites** the previous ones.
 
-If you do handle them:
+### So how do we do overloading in Python?
 
-* Program continues 
-* You can show a friendly message to the user
+We use **default arguments** or `*args` to simulate method overloading.
 
 ---
 
-## **3. try … except**
-
-Basic way to handle an error.
+### Example using default values:
 
 ```python
-try:
-    num = int(input("Enter a number: "))
-    result = 10 / num
-    print(result)
-except:
-    print("Oops! Something went wrong.")
+class Calculator:
+    def add(self, a=0, b=0, c=0):
+        print("Sum:", a + b + c)
+
+obj = Calculator()
+obj.add(10, 20)        # Sum: 30
+obj.add(5, 5, 5)       # Sum: 15
+obj.add()              # Sum: 0
 ```
 
+🧠 So technically, Python **supports overloading behavior**, but **not real method overloading**.
+
 ---
 
-## **4. try … except … else**
+### **2. Method Overriding (Same name, same input, redefined in child class)**
 
-The **else** block will run **only if no error happens**.
+When a **child class** has the **same method** as the **parent class**, and the **child version replaces the parent version** — this is **method overriding**.
+
+---
+
+### Example:
 
 ```python
-try:
-    num = int(input("Enter a number: "))
-    result = 10 / num
-except ZeroDivisionError:
-    print("You can't divide by zero!")
-except ValueError:
-    print("Please enter a valid number!")
-else:
-    print("Result is:", result)
+class Animal:
+    def speak(self):
+        print("Animal speaks")
+
+class Dog(Animal):
+    def speak(self):
+        print("Dog barks")
+
+d = Dog()
+d.speak()   # Output: Dog barks
 ```
 
----
-
-## **5. try … except … finally**
-
-The **finally** block always runs, whether there’s an error or not.
-Mostly used for cleanup like closing files.
-
-```python
-try:
-    f = open("data.txt", "r")
-    print(f.read())
-except FileNotFoundError:
-    print("File not found!")
-finally:
-    print("Done reading file.")
-```
+Parent class method is **overridden** in the child class.
 
 ---
 
-## **6. try … except … else … finally**
+## **3. `issubclass()` Function**
 
-You can combine all of them.
-
-```python
-try:
-    num = int(input("Enter a number: "))
-    result = 10 / num
-except ZeroDivisionError:
-    print("Cannot divide by zero!")
-except ValueError:
-    print("Invalid number!")
-else:
-    print("Result is:", result)
-finally:
-    print("Thank you for using this program.")
-```
+`issubclass(child_class, parent_class)`
+→ Returns `True` if the first class is **inherited from** the second class.
 
 ---
 
-## **7. raise – Throw Your Own Error**
-
-You can make your own error happen if something is wrong.
+### Example:
 
 ```python
-age = int(input("Enter your age: "))
-if age < 18:
-    raise ValueError("You must be 18 or older.")
-else:
-    print("Welcome!")
-```
-
----
-
-## **8. assert – Quick Checks**
-
-`assert` checks if something is true.
-If it’s not true, it stops the program with an error.
-
-```python
-x = int(input("Enter a positive number: "))
-assert x > 0, "Number must be positive!"
-print("You entered:", x)
-```
-
----
-
-## **9. Custom Exceptions – Your Own Error Type**
-
-You can make your own type of error for special cases.
-
-```python
-class NegativeNumberError(Exception):
+class A:
     pass
 
-num = int(input("Enter a positive number: "))
-if num < 0:
-    raise NegativeNumberError("Negative numbers are not allowed!")
-else:
-    print("You entered:", num)
+class B(A):
+    pass
+
+print(issubclass(B, A))   # True
+print(issubclass(A, B))   # False
 ```
 
 ---
 
-## **10. File Handling with Exceptions**
+## **4. `super()` Function**
+
+`super()` is used to call the **parent class method** from inside the **child class**.
+
+This is useful when you override a method, but still want to run the original method from parent.
+
+---
+
+### Example:
 
 ```python
-try:
-    with open("mydata.txt", "r") as file:
-        print(file.read())
-except FileNotFoundError:
-    print("File not found!")
-except PermissionError:
-    print("You don’t have permission.")
-finally:
-    print("Program ended.")
+class Person:
+    def show(self):
+        print("Person class")
+
+class Student(Person):
+    def show(self):
+        super().show()       # Calls parent method
+        print("Student class")
+
+s = Student()
+s.show()
 ```
+
+**Output:**
+
+```
+Person class  
+Student class
+```
+
+`super()` helps to reuse parent functionality even after overriding the method.
 
 ---
 
-### **Note:**
+## Summary
 
-| Keyword          | Meaning               | Use                     |
-| ---------------- | --------------------- | ----------------------- |
-| try              | Test a block of code  | Write risky code        |
-| except           | Catch the error       | Show friendly message   |
-| else             | Run if no error       | Show success            |
-| finally          | Always run            | Cleanup work            |
-| raise            | Create your own error | Check custom conditions |
-| assert           | Quick condition check | Stop if false           |
-| Custom Exception | Your own error type   | Special cases           |
+| Topic              | Meaning                                                              |
+| ------------------ | -------------------------------------------------------------------- |
+| Method Overloading | Same method name, different arguments (simulated using default args) |
+| Method Overriding  | Same method in child class (replaces parent’s version)               |
+| `issubclass()`     | Checks if a class is a child of another                              |
+| `super()`          | Calls parent method inside child class                               |
 
 ---
 

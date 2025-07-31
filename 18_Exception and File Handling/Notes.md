@@ -1,62 +1,42 @@
-
-
-# **Exception & File Handling in Python**
+# **Python Lecture: Exception & File Handling**
 
 
 ## **1. What is an Exception?**
 
-Imagine you’re writing Python code and suddenly—boom 💥—an error occurs while running it.
-This unexpected situation is called an **Exception**.
+An **exception** is just a fancy word for **error** that happens while your program is running.
 
-💡 **In simple words:**
-
-> Exception = A run-time error that stops your program unless you handle it.
-
----
-
-### **Common Examples of Exceptions:**
+Example of common exceptions:
 
 * Dividing by zero → `ZeroDivisionError`
-* Accessing a file that doesn’t exist → `FileNotFoundError`
-* Using a variable that isn’t defined → `NameError`
-* Converting `"abc"` to integer → `ValueError`
+* File not found → `FileNotFoundError`
+* Wrong data type → `ValueError`
+
+When an exception happens, your program will **stop** unless you handle it.
 
 ---
 
 ## **2. Why Handle Exceptions?**
 
-If you **don’t handle exceptions**, Python will:
+If you don’t handle them:
 
-1. Stop the program immediately
-2. Print an error message
+* Program stops 
 
-If you **handle exceptions**, Python will:
+If you do handle them:
 
-1. Catch the error 
-2. Let you control what happens next
+* Program continues 
+* You can show a friendly message to the user
 
 ---
 
 ## **3. try … except**
 
-The most basic way to handle exceptions.
-
-**Syntax:**
-
-```python
-try:
-    # Code that might cause an error
-except:
-    # What to do if an error happens
-```
-
-**Example:**
+Basic way to handle an error.
 
 ```python
 try:
     num = int(input("Enter a number: "))
     result = 10 / num
-    print("Result:", result)
+    print(result)
 except:
     print("Oops! Something went wrong.")
 ```
@@ -65,20 +45,7 @@ except:
 
 ## **4. try … except … else**
 
-Here, the **else block** runs **only if there is no exception**.
-
-**Syntax:**
-
-```python
-try:
-    # risky code
-except:
-    # handle error
-else:
-    # runs only if try succeeds
-```
-
-**Example:**
+The **else** block will run **only if no error happens**.
 
 ```python
 try:
@@ -96,40 +63,24 @@ else:
 
 ## **5. try … except … finally**
 
-The **finally block** runs **no matter what happens** —
-whether there’s an exception or not.
-
-**Syntax:**
-
-```python
-try:
-    # risky code
-except:
-    # handle error
-finally:
-    # always runs
-```
-
-**Example:**
+The **finally** block always runs, whether there’s an error or not.
+Mostly used for cleanup like closing files.
 
 ```python
 try:
     f = open("data.txt", "r")
-    content = f.read()
-    print(content)
+    print(f.read())
 except FileNotFoundError:
     print("File not found!")
 finally:
-    print("Closing file... Done!")
+    print("Done reading file.")
 ```
 
 ---
 
 ## **6. try … except … else … finally**
 
-Yes! You can combine them all.
-
-**Example:**
+You can combine all of them.
 
 ```python
 try:
@@ -138,36 +89,86 @@ try:
 except ZeroDivisionError:
     print("Cannot divide by zero!")
 except ValueError:
-    print("Invalid input! Please enter a number.")
+    print("Invalid number!")
 else:
     print("Result is:", result)
 finally:
-    print("Thank you for using my program.")
+    print("Thank you for using this program.")
 ```
 
 ---
 
-## **7. File Handling with Exception Handling**
+## **7. raise – Throw Your Own Error**
 
-When working with files, exceptions are common — like missing files, permission issues, etc.
+You can make your own error happen if something is wrong.
 
-**Example:**
+```python
+age = int(input("Enter your age: "))
+if age < 18:
+    raise ValueError("You must be 18 or older.")
+else:
+    print("Welcome!")
+```
+
+---
+
+## **8. assert – Quick Checks**
+
+`assert` checks if something is true.
+If it’s not true, it stops the program with an error.
+
+```python
+x = int(input("Enter a positive number: "))
+assert x > 0, "Number must be positive!"
+print("You entered:", x)
+```
+
+---
+
+## **9. Custom Exceptions – Your Own Error Type**
+
+You can make your own type of error for special cases.
+
+```python
+class NegativeNumberError(Exception):
+    pass
+
+num = int(input("Enter a positive number: "))
+if num < 0:
+    raise NegativeNumberError("Negative numbers are not allowed!")
+else:
+    print("You entered:", num)
+```
+
+---
+
+## **10. File Handling with Exceptions**
 
 ```python
 try:
     with open("mydata.txt", "r") as file:
-        data = file.read()
-        print("File content:")
-        print(data)
+        print(file.read())
 except FileNotFoundError:
-    print("The file does not exist!")
+    print("File not found!")
 except PermissionError:
-    print("You don't have permission to open this file.")
+    print("You don’t have permission.")
 finally:
-    print("Operation finished.")
+    print("Program ended.")
 ```
 
+---
 
+### **Note**
 
+| Keyword          | Meaning               | Use                     |
+| ---------------- | --------------------- | ----------------------- |
+| try              | Test a block of code  | Write risky code        |
+| except           | Catch the error       | Show friendly message   |
+| else             | Run if no error       | Show success            |
+| finally          | Always run            | Cleanup work            |
+| raise            | Create your own error | Check custom conditions |
+| assert           | Quick condition check | Stop if false           |
+| Custom Exception | Your own error type   | Special cases           |
 
+---
 
