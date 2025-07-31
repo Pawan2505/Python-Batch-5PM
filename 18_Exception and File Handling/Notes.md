@@ -1,4 +1,4 @@
-# **Python Lecture: Exception & File Handling**
+# **Exception & File Handling**
 
 
 ## **1. What is an Exception?**
